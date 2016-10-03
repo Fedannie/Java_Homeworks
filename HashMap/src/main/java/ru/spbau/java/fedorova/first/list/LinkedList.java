@@ -63,7 +63,7 @@ public class LinkedList {
             return null;
         }
         while (cur != null) {
-            if (cur.getKey() == key)
+            if (cur.getKey().equals(key))
                 return cur;
             cur = cur.getNext();
         }

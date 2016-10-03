@@ -18,19 +18,32 @@ public class HashMapTest {
         hm.put("Third", "3");
         hm.put("Forth", "4");
     }
+
+    @Test
+    public void size() throws Exception {
+        assertEquals(4, hm.size());
+        hm.remove("Third");
+        hm.put("Forth", "5");
+        assertEquals(3, hm.size());
+        hm.put("Fifth", "5");
+        assertEquals(4, hm.size());
+        hm.clear();
+        assertEquals(0, hm.size());
+    }
+
     @Test
     public void contains() throws Exception {
-        assertEquals(true, hm.contains("First"));
-        assertEquals(true, hm.contains("Forth"));
-        assertEquals(false, hm.contains("Smth"));
+        assertTrue(hm.contains("First"));
+        assertTrue(hm.contains("Forth"));
+        assertFalse(hm.contains("Smth"));
     }
 
     @Test
     public void get() throws Exception {
-        assertEquals(null, hm.get("Fifth"));
+        assertNull(hm.get("Fifth"));
         assertEquals("1", hm.get("First"));
         assertEquals("3", hm.get("Third"));
-        assertEquals(null, hm.get("Smth"));
+        assertNull(hm.get("Smth"));
     }
 
     @Test
@@ -38,14 +51,14 @@ public class HashMapTest {
         assertEquals(null, hm.put("Sixth", "6"));
         assertEquals("3", hm.put("Third", "10"));
         assertEquals("10", hm.put("Third", "3"));
-        assertEquals(null, hm.put("Tenth", "10"));
+        assertNull(hm.put("Tenth", "10"));
     }
 
     @Test
     public void remove() throws Exception {
         hm.put("Tenth", "10");
         assertEquals("10", hm.remove("Tenth"));
-        assertEquals(null, hm.remove("Smth"));
+        assertNull(hm.remove("Smth"));
         assertEquals("1", hm.remove("First"));
     }
 

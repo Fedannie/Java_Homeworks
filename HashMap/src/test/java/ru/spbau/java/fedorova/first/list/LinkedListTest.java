@@ -29,8 +29,8 @@ public class LinkedListTest {
     public void remove() throws Exception {
         assertEquals("6", ll.remove("Sixth"));
         assertEquals("4", ll.remove("Forth"));
-        assertEquals(null, ll.remove("Sixth"));
-        assertEquals(null, ll.remove("Smth Else"));
+        assertNull(ll.remove("Sixth"));
+        assertNull(ll.remove("Smth Else"));
     }
 
     @Test
@@ -39,6 +39,6 @@ public class LinkedListTest {
         assertEquals("5", ll.find("Fifth").getValue());
         assertEquals("2", ll.find("Second").getValue());
         assertEquals("4", ll.find("Forth").getValue());
-        assertEquals(null, ll.find("First"));
+        assertNull(ll.find("First"));
     }
 }

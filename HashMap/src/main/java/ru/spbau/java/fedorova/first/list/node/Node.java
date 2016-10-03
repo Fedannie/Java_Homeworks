@@ -6,29 +6,29 @@ package ru.spbau.java.fedorova.first.list.node;
  */
 
 public class Node {
-    private String key;
+    final private String key;
     private String value;
     private Node next;
-    public Node(){}
+    //public Node(){}
     public Node(String key, String value) {
         this.key = key;
         this.value = value;
-        this.next = null;
+        next = null;
     }
     public String getKey(){
-        return this.key;
+        return key;
     }
     public String getValue(){
-        return this.value;
+        return value;
     }
-    public void setKey(String key) {
-        this.key = key;
-    }
+    //public void setKey(String key) {
+    //    this.key = key;
+    //}
     public void setValue(String value) {
         this.value = value;
     }
     public Node getNext(){
-        return this.next;
+        return next;
     }
     public void setNext(Node next) {
         this.next = next;
