@@ -2,7 +2,9 @@ package ru.spbau.java.fedorova.trie;
 
 import ru.spbau.java.fedorova.trie.node.Node;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created on 21.09.2016.
@@ -16,29 +18,41 @@ public class MyTrie implements Trie, StreamSerializable{
     }
 
     public void serialize(OutputStream out) throws IOException {
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
-        objectOutputStream.writeObject(head);
+        write(head, out);
     }
 
     public void deserialize(InputStream in) throws IOException, ClassNotFoundException {
-        ObjectInputStream objectInputStream = new ObjectInputStream(in);
-        head = (Node) objectInputStream.readObject();
-
+        head = read(in);
     }
 
+    public Node read(InputStream in) throws IOException {
+        Node head = new Node();
+        head.setSize(in.read());
+        head.setTerm(in.read() != 0);
+        for (char ch = (char) in.read(); ch != 0; ch = (char) in.read()) {
+            head.setNext(ch, read(in));
+        }
+        return head;
+    }
+
+    private void write(Node head, OutputStream out) throws IOException {
+        out.write(head.writeAll());
+    }
+
+
     public boolean add(String element) {
-        if (this.contains(element)) {
+        if (contains(element)) {
             return true;
         }
         Node cur = head;
         for (int ind = 0; ind < element.length(); ind++) {
             if (cur.getNext(element.charAt(ind)) == null) {
-                cur.setChar(element.charAt(ind));
+                cur.setNextByChar(element.charAt(ind));
             }
             cur.incSize();
             cur = cur.getNext(element.charAt(ind));
         }
-        cur.setTerm();
+        cur.setTerm(true);
         cur.incSize();
         return false;
     }
@@ -51,37 +65,32 @@ public class MyTrie implements Trie, StreamSerializable{
             }
             cur = cur.getNext(element.charAt(ind));
         }
-        if (!cur.getTerm()){
-            return false;
-        }
-        return true;
+        return (cur.getTerm());
     }
 
     public boolean remove(String element) {
-        if (!this.contains(element)) {
+        if (!contains(element)) {
             return false;
         }
         Node cur = head;
-        Node last = head;
-        int last_ind = 0;
         for (int ind = 0; ind < element.length(); ind++) {
             cur.decSize();
-            if (cur.getSize() > 0) {
-                last = cur;
-                last_ind = ind;
-            }
             cur = cur.getNext(element.charAt(ind));
         }
-        if (cur.getSize() > 1) {
-            cur.setUnTerm();
-        } else {
-            last.remChar(element.charAt(last_ind));
+        cur.decSize();
+        cur = cur.getPrevious();
+        for (int ind = element.length() - 1; ind >= 0; ind--) {
+            if (cur.getTerm()) {
+                break;
+            }
+            cur.deleteNode(element.charAt(ind));
+            cur = cur.getPrevious();
         }
         return true;
     }
 
     public int size() {
-        return this.head.getSize();
+        return head.getSize();
     }
 
     public int howManyStartsWithPrefix(String prefix) {

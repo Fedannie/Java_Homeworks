@@ -5,10 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created on 23.09.2016.
- * @author  Fedorova Anna
- */
 public class MyTrieTest {
     MyTrie mt;
     @Before
@@ -24,31 +20,35 @@ public class MyTrieTest {
 
     @Test
     public void add() throws Exception {
-        assertEquals(true, mt.add("tea"));
-        assertEquals(false, mt.add("AAB"));
-        assertEquals(false, mt.add("AAC"));
-        assertEquals(false, mt.add("INN"));
+        assertTrue(mt.add("tea"));
+        assertFalse(mt.add("AAB"));
+        assertFalse(mt.add("AAC"));
+        assertFalse(mt.add("INN"));
     }
 
     @Test
     public void contains() throws Exception {
-        assertEquals(true, mt.contains("AAA"));
-        assertEquals(false, mt.contains("aaa"));
-        assertEquals(false, mt.contains("Ten"));
-        assertEquals(true, mt.contains("ted"));
-        assertEquals(true, mt.contains("ten"));
-        assertEquals(true, mt.contains("to"));
-        assertEquals(true, mt.contains("tea"));
+        assertTrue(mt.contains("AAA"));
+        assertFalse(mt.contains("aaa"));
+        assertFalse(mt.contains("Ten"));
+        assertTrue(mt.contains("ted"));
+        assertTrue(mt.contains("ten"));
+        assertTrue(mt.contains("to"));
+        assertTrue(mt.contains("tea"));
     }
 
     @Test
     public void remove() throws Exception {
-        assertEquals(true, mt.remove("AAA"));
-        assertEquals(false, mt.remove("a"));
-        assertEquals(false, mt.remove("Ten"));
-        assertEquals(false, mt.remove("te"));
-        assertEquals(true, mt.remove("tea"));
-        assertEquals(false, mt.remove("in"));
+        MyTrie mmt = new MyTrie();
+        mmt.add("Hello");
+        assertTrue(mmt.remove("Hello"));
+        assertEquals(0, mmt.size());
+        assertTrue(mt.remove("AAA"));
+        assertFalse(mt.remove("a"));
+        assertFalse(mt.remove("Ten"));
+        assertFalse(mt.remove("te"));
+        assertTrue(mt.remove("tea"));
+        assertFalse(mt.remove("in"));
     }
 
     @Test
@@ -58,13 +58,13 @@ public class MyTrieTest {
         mt.add("D");
         assertEquals(8, mt.size());
         //assertEquals(true, mt.contains("ten"));//
-        assertEquals(true, mt.remove("ten"));//
+        assertTrue(mt.remove("ten"));//
         //assertEquals(true, mt.contains("to"));//
-        assertEquals(true, mt.remove("to"));//
+        assertTrue(mt.remove("to"));//
         //assertEquals(true, mt.contains("tea"));
-        assertEquals(true, mt.remove("tea"));
+        assertTrue(mt.remove("tea"));
         //assertEquals(true, mt.contains("inn"));
-        assertEquals(true, mt.remove("inn"));
+        assertTrue(mt.remove("inn"));
         assertEquals(4, mt.size());
     }
 
