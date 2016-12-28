@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +13,7 @@ public class CollectionsTest {
     private Iterable<String> stringNumbers;
     @Before
     public void make() {
-        squares = new ArrayList<Integer>();
+        squares = new ArrayList<>();
         for (int i = 1; i < 20; i++) {
                 squares.add(i * i);
         }
@@ -28,11 +27,17 @@ public class CollectionsTest {
         for (int i = 1; i < 20; i++) {
             assertEquals(((Integer)(i * i)).toString(), ans.get(i - 1));
         }
+
+        Function1<Object, Integer> toHashCode = Object::hashCode;
+        ArrayList<Integer> res = Collections.map(toHashCode, squares);
+        for (int i = 0; i < squares.size(); i++) {
+            assertEquals(res.get(i), (Integer) new Integer((i + 1) * (i + 1)).hashCode());
+        }
     }
 
     @Test
     public void filter() throws Exception {
-        ArrayList <Integer> a = new ArrayList<Integer>(Arrays.asList(1, 2, 0, 8, 11));
+        ArrayList <Integer> a = new ArrayList<>(Arrays.asList(1, 2, 0, 8, 11));
         Predicate <Integer> f = x -> x % 2 == 0;
         ArrayList <Integer> b = Collections.filter(f, a);
         assertEquals(b.size(), 3);
@@ -43,22 +48,16 @@ public class CollectionsTest {
 
     @Test
     public void takeWhile() throws Exception {
-        Predicate <String> mod5 = x -> !x.contains("5");
-        Iterable<String> taken = Collections.takeWhile(mod5, stringNumbers);
-        ArrayList<String> ans = new ArrayList<String>();
-        taken.forEach(ans::add);
-        assertEquals(4, ans.size());
-        assertEquals("16", ans.get(3));
+        ArrayList<Integer> array = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        ArrayList<Integer> takenArray = Collections.takeWhile(xw -> xw <= 5, array);
+        assertEquals(Arrays.asList(1, 2, 3, 4, 5), takenArray);
     }
 
     @Test
     public void takeUnless() throws Exception {
-        Predicate <String> mod5 = x -> x.contains("5");
-        Iterable<String> taken = Collections.takeUnless(mod5, stringNumbers);
-        ArrayList<String> ans = new ArrayList<String>();
-        taken.forEach(ans::add);
-        assertEquals(4, ans.size());
-        assertEquals("16", ans.get(3));
+        ArrayList<Integer> array = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        ArrayList<Integer> takenArray = Collections.takeUnless(xw -> xw > 5, array);
+        assertEquals(Arrays.asList(1, 2, 3, 4, 5), takenArray);
     }
 
     @Test
@@ -72,5 +71,4 @@ public class CollectionsTest {
         Function2<Number, String, String> f = (x1, x2) -> "(" + x1 + " + " + x2 + ")";
         assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", Collections.foldr(Arrays.asList(1, 2, 3, 4, 5), f, "0"));
     }
-
 }

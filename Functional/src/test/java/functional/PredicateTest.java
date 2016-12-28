@@ -51,4 +51,37 @@ public class PredicateTest {
         assertTrue(p7.apply(0));
     }
 
+    @Test
+    public void orLazy() throws Exception {
+        Predicate<Integer> mod3 = x -> x == 3;
+        Predicate<Integer> is3orThrow = mod3.or(x -> {throw new IllegalStateException();});
+        boolean thrown = false;
+        try{
+            is3orThrow.apply(4);
+        }
+        catch (Exception e){
+            thrown = true;
+        }
+        finally {
+            assertTrue(thrown);
+        }
+        assertTrue(is3orThrow.apply(3));
+    }
+
+    @Test
+    public void andLazy() throws Exception{
+        Predicate<Integer> mod3 = x -> x == 3;
+        Predicate<Integer> isNot3orThrow = mod3.and(x -> {throw new IllegalStateException();});
+        boolean thrown = false;
+        try{
+            isNot3orThrow.apply(3);
+        }
+        catch (Exception e){
+            thrown = true;
+        }
+        finally {
+            assertTrue(thrown);
+        }
+        assertFalse(isNot3orThrow.apply(4));
+    }
 }
